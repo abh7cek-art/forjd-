@@ -91,6 +91,28 @@
         opacity: 0;
       }
     }
+
+    #promise {
+      position: absolute;
+      font-size: 14px;
+      opacity: 0.85;
+      text-align: right;
+      max-width: 220px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      animation: fadeIn 2s ease;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 0.85;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -105,8 +127,15 @@
     </div>
   </div>
 
+  <!-- Cute promise text -->
+  <div id="promise">
+    i promise we can go somewhere else <br>
+    i won’t go beanly again :( 🙈😉
+  </div>
+
   <script>
     const noBtn = document.getElementById("noBtn");
+    const promise = document.getElementById("promise");
 
     function moveNoButton() {
       const padding = 20;
@@ -123,13 +152,13 @@
     // Desktop
     noBtn.addEventListener("mouseenter", moveNoButton);
 
-    // Mobile (move BEFORE tap registers)
+    // Mobile
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
       moveNoButton();
     });
 
-    // Backup: if somehow clicked
+    // Backup
     noBtn.addEventListener("click", moveNoButton);
 
     function sayYes() {
@@ -139,7 +168,18 @@
         "I knew it 💞 Can't wait to be your Valentine 😘";
     }
 
-    // Floating hearts & kisses
+    // Randomize promise position (bottom-right area)
+    function randomizePromise() {
+      const offsetX = Math.random() * 40;
+      const offsetY = Math.random() * 40;
+
+      promise.style.right = 20 + offsetX + "px";
+      promise.style.bottom = 20 + offsetY + "px";
+    }
+
+    randomizePromise();
+
+    // Floating emojis
     const emojis = ["❤️", "💋", "😘", "💕"];
 
     function createEmoji() {
