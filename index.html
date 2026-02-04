@@ -23,7 +23,7 @@
       text-align: center;
     }
 
-    /* Top-right text */
+    /* Top-right rotating text */
     .top-text {
       position: fixed;
       top: 20px;
@@ -32,8 +32,7 @@
       font-size: 1rem;
       max-width: 260px;
       text-align: right;
-      opacity: 0.9;
-      z-index: 3;
+      z-index: 5;
       animation: fade 4s infinite;
     }
 
@@ -44,33 +43,21 @@
       100% { opacity: 0; }
     }
 
-    .container {
-      z-index: 2;
-    }
-
     h1 {
       color: #fff;
       font-size: 2.4rem;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       text-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    .buttons {
-      position: relative;
-      height: 180px;
-    }
-
-    button {
+    #yes {
       padding: 15px 35px;
       font-size: 1.2rem;
       border: none;
       border-radius: 30px;
-      cursor: pointer;
-    }
-
-    #yes {
       background: #ff4d6d;
       color: white;
+      cursor: pointer;
       box-shadow: 0 10px 20px rgba(0,0,0,0.25);
     }
 
@@ -78,17 +65,24 @@
       transform: scale(1.1);
     }
 
+    /* NO button must be fixed */
     #no {
+      padding: 15px 35px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
       background: white;
       color: #ff4d6d;
-      position: absolute;
+      cursor: pointer;
+      position: fixed;
       left: 60%;
-      top: 20px;
+      top: 60%;
+      z-index: 4;
     }
 
     /* Floating emojis */
     .float {
-      position: absolute;
+      position: fixed;
       font-size: 24px;
       animation: floatUp linear infinite;
       opacity: 0.85;
@@ -112,28 +106,77 @@
 
   <div class="top-text" id="topText"></div>
 
-  <div class="container">
+  <div>
     <h1>Will you be my Valentine? 💖</h1>
-    <div class="buttons">
-      <button id="yes">YES 💕</button>
-      <button id="no">NO 🙈</button>
-    </div>
+    <button id="yes">YES 💕</button>
   </div>
+
+  <button id="no">NO 🙈</button>
 
   <script>
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
     const topText = document.getElementById("topText");
 
-    /* NO button moves but never disappears */
-    function moveNo() {
+    /* Move NO button (always visible) */
+    function moveNo(e) {
+      if (e) e.preventDefault();
+
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
 
-      const maxX = window.innerWidth - btnWidth - 20;
-      const maxY = window.innerHeight - btnHeight - 20;
+      const maxX = window.innerWidth - btnWidth - 10;
+      const maxY = window.innerHeight - btnHeight - 10;
 
       const x = Math.random() * maxX;
       const y = Math.random() * maxY;
 
       noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("touchstart", moveNo, { passive: false });
+
+    yesBtn.addEventListener("click", () => {
+      document.body.innerHTML = `
+        <div style="
+          height:100vh;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          background:linear-gradient(135deg,#ff758c,#ff7eb3);
+          color:white;
+          font-size:2.3rem;
+          text-align:center;
+        ">
+          SHE SAID YES!!! 💍❤️<br/>
+          Best. Valentine. Ever. 🥹
+        </div>
+      `;
+    });
+
+    /* Floating emojis */
+    const emojis = ["❤️", "💋", "💍"];
+    function createEmoji() {
+      const span = document.createElement("span");
+      span.className = "float";
+      span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      span.style.left = Math.random() * 100 + "vw";
+      span.style.animationDuration = 3 + Math.random() * 3 + "s";
+      document.body.appendChild(span);
+      setTimeout(() => span.remove(), 6000);
+    }
+    setInterval(createEmoji, 280);
+
+    /* Top-right messages */
+    const messages = [
+      "I promise I won’t take you to Beanly again like all the time ☕😅",
+      "I miss you baby 💕",
+      "You’re my favorite person 🥹",
+      "One YES = unlimited hugs 🤍"
+    ];
+
+    let i = 0;
+    function rotateText() {
+      topText.innerText = messages
