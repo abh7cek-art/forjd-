@@ -2,131 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Be My Valentine 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
-
     body {
+      margin: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #ff9a9e, #fecfef);
       overflow: hidden;
+      background: linear-gradient(135deg, #ff6f91, #ff9a9e);
+      font-family: "Poppins", Arial, sans-serif;
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
     }
 
-    /* Top-right rotating text */
-    .top-text {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      color: white;
-      font-size: 1rem;
-      max-width: 260px;
-      text-align: right;
-      z-index: 5;
-      animation: fade 4s infinite;
-    }
-
-    @keyframes fade {
-      0% { opacity: 0; }
-      20% { opacity: 1; }
-      80% { opacity: 1; }
-      100% { opacity: 0; }
+    .content {
+      z-index: 2;
+      padding: 20px;
     }
 
     h1 {
-      color: #fff;
-      font-size: 2.4rem;
-      margin-bottom: 40px;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-size: 32px;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
 
-    #yes {
-      padding: 15px 35px;
-      font-size: 1.2rem;
-      border: none;
+    p {
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+
+    .buttons {
+      position: relative;
+      width: 260px;
+      height: 70px;
+      margin: 0 auto;
+    }
+
+    button {
+      position: absolute;
+      padding: 14px 26px;
+      font-size: 18px;
       border-radius: 30px;
-      background: #ff4d6d;
-      color: white;
+      border: none;
       cursor: pointer;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+      transition: transform 0.15s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    #yes:hover {
+    button:hover {
       transform: scale(1.1);
     }
 
-    /* NO button must be fixed */
-    #no {
-      padding: 15px 35px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 30px;
-      background: white;
-      color: #ff4d6d;
-      cursor: pointer;
-      position: fixed;
-      left: 60%;
-      top: 60%;
-      z-index: 4;
+    #yesBtn {
+      background: #ff2e63;
+      color: white;
+      left: 0;
     }
 
-    /* Floating emojis */
-    .float {
-      position: fixed;
-      font-size: 24px;
-      animation: floatUp linear infinite;
-      opacity: 0.85;
+    #noBtn {
+      background: white;
+      color: #ff2e63;
+      right: 0;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 26px;
+      animation: floatUp 8s linear infinite;
+      opacity: 0.8;
       pointer-events: none;
     }
 
     @keyframes floatUp {
-      from {
-        transform: translateY(100vh);
+      0% {
+        transform: translateY(100vh) scale(0.8);
+        opacity: 0;
+      }
+      15% {
         opacity: 1;
       }
-      to {
-        transform: translateY(-10vh);
+      100% {
+        transform: translateY(-10vh) scale(1.3);
         opacity: 0;
       }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="top-text" id="topText"></div>
+  <div class="content">
+    <h1 id="question">Will you be my Valentine? 💖</h1>
+    <p id="subtext">I promise lots of love & chocolates 🍫</p>
 
-  <div>
-    <h1>Will you be my Valentine? 💖</h1>
-    <button id="yes">YES 💕</button>
+    <div class="buttons" id="buttons">
+      <button id="yesBtn" onclick="sayYes()">Yes 💕</button>
+      <button id="noBtn">No 🙈</button>
+    </div>
   </div>
 
-  <button id="no">NO 🙈</button>
-
   <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const topText = document.getElementById("topText");
+    const noBtn = document.getElementById("noBtn");
 
-    /* Move NO button (always visible) */
-    function moveNo(e) {
-      if (e) e.preventDefault();
-
-      const btnWidth = noBtn.offsetWidth;
-      const btnHeight = noBtn.offsetHeight;
-
-      const maxX = window.innerWidth - btnWidth - 10;
-      const maxY = window.innerHeight - btnHeight - 10;
+    function moveNoButton() {
+      const padding = 20;
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
       const x = Math.random() * maxX;
       const y = Math.random() * maxY;
@@ -135,48 +120,42 @@
       noBtn.style.top = y + "px";
     }
 
-    noBtn.addEventListener("mouseover", moveNo);
-    noBtn.addEventListener("touchstart", moveNo, { passive: false });
+    // Desktop
+    noBtn.addEventListener("mouseenter", moveNoButton);
 
-    yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          background:linear-gradient(135deg,#ff758c,#ff7eb3);
-          color:white;
-          font-size:2.3rem;
-          text-align:center;
-        ">
-          SHE SAID YES!!! 💍❤️<br/>
-          Best. Valentine. Ever. 🥹
-        </div>
-      `;
+    // Mobile (move BEFORE tap registers)
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
     });
 
-    /* Floating emojis */
-    const emojis = ["❤️", "💋", "💍"];
-    function createEmoji() {
-      const span = document.createElement("span");
-      span.className = "float";
-      span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-      span.style.left = Math.random() * 100 + "vw";
-      span.style.animationDuration = 3 + Math.random() * 3 + "s";
-      document.body.appendChild(span);
-      setTimeout(() => span.remove(), 6000);
+    // Backup: if somehow clicked
+    noBtn.addEventListener("click", moveNoButton);
+
+    function sayYes() {
+      document.getElementById("buttons").style.display = "none";
+      document.getElementById("question").innerHTML = "Yayyy!! 😍💘";
+      document.getElementById("subtext").innerHTML =
+        "I knew it 💞 Can't wait to be your Valentine 😘";
     }
-    setInterval(createEmoji, 280);
 
-    /* Top-right messages */
-    const messages = [
-      "I promise I won’t take you to Beanly again like all the time ☕😅",
-      "I miss you baby 💕",
-      "You’re my favorite person 🥹",
-      "One YES = unlimited hugs 🤍"
-    ];
+    // Floating hearts & kisses
+    const emojis = ["❤️", "💋", "😘", "💕"];
 
-    let i = 0;
-    function rotateText() {
-      topText.innerText = messages
+    function createEmoji() {
+      const emoji = document.createElement("div");
+      emoji.className = "emoji";
+      emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = Math.random() * 3 + 6 + "s";
+      emoji.style.fontSize = Math.random() * 18 + 22 + "px";
+
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 9000);
+    }
+
+    setInterval(createEmoji, 400);
+  </script>
+
+</body>
+</html>
