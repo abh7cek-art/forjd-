@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Will You Be My Valentine? 💖</title>
+  <title>Be My Valentine 💖</title>
 
   <style>
     * {
@@ -23,20 +23,41 @@
       text-align: center;
     }
 
+    /* Top-right text */
+    .top-text {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 1rem;
+      max-width: 260px;
+      text-align: right;
+      opacity: 0.9;
+      z-index: 3;
+      animation: fade 4s infinite;
+    }
+
+    @keyframes fade {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
     .container {
       z-index: 2;
     }
 
     h1 {
       color: #fff;
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       margin-bottom: 30px;
       text-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     .buttons {
       position: relative;
-      height: 150px;
+      height: 180px;
     }
 
     button {
@@ -45,7 +66,6 @@
       border: none;
       border-radius: 30px;
       cursor: pointer;
-      transition: 0.2s ease;
     }
 
     #yes {
@@ -63,7 +83,7 @@
       color: #ff4d6d;
       position: absolute;
       left: 60%;
-      top: 0;
+      top: 20px;
     }
 
     /* Floating emojis */
@@ -71,7 +91,8 @@
       position: absolute;
       font-size: 24px;
       animation: floatUp linear infinite;
-      opacity: 0.8;
+      opacity: 0.85;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
@@ -89,6 +110,8 @@
 
 <body>
 
+  <div class="top-text" id="topText"></div>
+
   <div class="container">
     <h1>Will you be my Valentine? 💖</h1>
     <div class="buttons">
@@ -100,53 +123,17 @@
   <script>
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
+    const topText = document.getElementById("topText");
 
-    // Move NO button randomly
+    /* NO button moves but never disappears */
     function moveNo() {
-      const x = Math.random() * (window.innerWidth - 120);
-      const y = Math.random() * (window.innerHeight - 60);
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+
+      const maxX = window.innerWidth - btnWidth - 20;
+      const maxY = window.innerHeight - btnHeight - 20;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
       noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-    }
-
-    noBtn.addEventListener("mouseover", moveNo);
-    noBtn.addEventListener("touchstart", moveNo);
-
-    yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          background:linear-gradient(135deg,#ff758c,#ff7eb3);
-          color:white;
-          font-size:2.5rem;
-          text-align:center;
-        ">
-          Yayyy!!! 💍❤️<br/>You just made me the happiest 🥹
-        </div>
-      `;
-    });
-
-    // Floating emojis
-    const emojis = ["❤️", "💋", "💍"];
-
-    function createEmoji() {
-      const span = document.createElement("span");
-      span.classList.add("float");
-      span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-      span.style.left = Math.random() * 100 + "vw";
-      span.style.animationDuration = 4 + Math.random() * 3 + "s"; // medium-fast
-      document.body.appendChild(span);
-
-      setTimeout(() => {
-        span.remove();
-      }, 7000);
-    }
-
-    setInterval(createEmoji, 300);
-  </script>
-
-</body>
-</html>
